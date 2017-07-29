@@ -1,0 +1,4 @@
+for dihedral calculate left and right part of dihedral, if it reconnects, we 
+
+1.) have something circular
+2.) don't want to go on in that direction, but still need to check if we caught every node

@@ -1,0 +1,25 @@
+ 2       1  # CR-NA
+ 3       2  # CR-NA
+ 4       3  # CW-NA
+ 5       4  # CW-CW
+ 6       1  # NA-CT
+ 7       2  # CR-HA
+ 8       3  # NA-CT
+ 9       4  # CW-HA
+10       5  # CW-HA
+11       6  # HC-CT
+12       6  # HC-CT
+13       6  # HC-CT
+14       8  # CT-CT
+15       8  # HC-CT
+16       8  # HC-CT
+17      14  # CT-CT
+18      14  # HC-CT
+19      14  # HC-CT
+20      17  # CT-CT
+21      17  # HC-CT
+22      17  # HC-CT
+23      20  # HC-CT
+24      20  # HC-CT
+25      20  # HC-CT
+ 5       1  # CW-NA
