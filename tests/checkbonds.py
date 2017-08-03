@@ -41,6 +41,9 @@ for b in top._bonds:
     if b not in blist:
         fucked = True
 
+if len(top._bonds) != len(blist):
+    fucked = True
+
 if fucked:
     print('Bonds are fucked')
 else:
@@ -52,6 +55,9 @@ print('Checking angles')
 for a in top._angles:
     if a not in alist:
         fucked = True
+
+if len(top._angles) != len(alist):
+    fucked = True
 
 if fucked:
     print('Angles are fucked')
@@ -80,6 +86,9 @@ for d in dlist:
         print d
         fucked = True
 
+if len(dlist) != len(dall):
+    fucked = True
+
 if fucked:
     print('Dihedrals are fucked')
 else:
@@ -93,7 +102,8 @@ top = Topology(atoms, sorted=False)
 ndih = 20
 ndih = 0
 ndih = 10
-ndix = 50
+ndih = 49
+ndih = 39
 
 dihed = top._diheds[ndih]
 print 'my dihedral is: ', dihed
