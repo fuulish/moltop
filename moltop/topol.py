@@ -82,18 +82,25 @@ class Topology(object):
         for vertex in self.graph:
             edges = self.graph[vertex]
             nedge = len(edges)
-            if nedge == 2:
-                l = [vertex]
-                l.extend(edges)
-                angles.append(l)
-            elif nedge > 2:
-                for i in edges:
-                    for j in edges[i+1:]:
-                        l = [vertex]
-                        l.extend([i,j])
-                        if sorted:
-                            l.sort()
-                        angles.append(l)
+            #if nedge == 2:
+            #    l = [edges[0], vertex, edges[1]]
+            #    #l.extend(edges)
+            #    if sorted:
+            #        l.sort()
+            #    angles.append(l)
+            #elif nedge > 2:
+            #print 'new: ', edges
+            #if nedge >= 2:
+            for c, i in enumerate(edges):
+                for j in edges[c+1:]:
+                    l = [i, vertex, j]
+                    #print 'actual angle: ', l
+                    #l.extend([i,j])
+                    if sorted:
+                        l.sort()
+                    angles.append(l)
+
+        print angles
 
         return angles
 
