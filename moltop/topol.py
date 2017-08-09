@@ -367,6 +367,41 @@ class Topology(object):
 
         return left, right
 
+    def extract_types(self):
+        """
+        """
+
+        syms = self.atoms.get_chemical_symbols()
+
+        fsttypes = defaultdict(list)
+        loctypes = []
+
+        for i, a in enumerate(self.atoms):
+            type = syms[i] + ' '
+
+            connecting = [syms[b] for b in self.graph[i]]
+            connecting.sort()
+
+            #contract into "chemical" formula - still missing
+
+            type += ''.join(c for c in connecting)
+
+            #for b in self.graph[i]:
+            #    type += syms[b]
+
+            fsttypes[type].append(i)
+            loctypes.append(type)
+
+        #next round use kinds of connecting atoms and carefully sort, somehow
+        #maybe sort according to number of bonds
+
+        #for type in loctypes:
+        #    spl = type.split()
+        #    atm = spl[0]uuu
+
+        for key in fsttypes:
+            print key, fsttypes[key]
+
 def acceptable_bond_lengths(s1, s2):
     """
     """
