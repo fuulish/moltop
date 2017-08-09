@@ -8,7 +8,7 @@ from copy import copy, deepcopy
 
 class Topology(object):
 
-    def __init__(self, atoms, bonds=None, angles=None, dihedrals=None, impropers=None, onefour=0.5, sorted=False, ring_improper=False, bond_fudge=1.0):
+    def __init__(self, atoms, bonds=None, angles=None, dihedrals=None, impropers=None, onefour=0.5, sorted=False, ring_improper=False, bond_fudge=1.0, onlygraph=False):
         """
         Class for handling molecular topologies
         """
@@ -26,20 +26,21 @@ class Topology(object):
 
         self.graph = Graph(vertices=range(len(atoms)), edges=self._bonds)
 
-        if angles is None:
-            self._angles = self.determine_angles(sorted)
-        else:
-            self._angles = angles
+        if not onlygraph:
+            if angles is None:
+                self._angles = self.determine_angles(sorted)
+            else:
+                self._angles = angles
 
-        if dihedrals is None:
-            self._diheds = self.determine_dihedrals(sorted)
-        else:
-            self._diheds = dihedrals
+            if dihedrals is None:
+                self._diheds = self.determine_dihedrals(sorted)
+            else:
+                self._diheds = dihedrals
 
-        if impropers is None:
-            self._improp = self.determine_impropers(sorted, ring_improper)
-        else:
-            self._improp = impropers
+            if impropers is None:
+                self._improp = self.determine_impropers(sorted, ring_improper)
+            else:
+                self._improp = impropers
 
         #plot_graph(atoms.positions, g)
         #plt.show()
@@ -100,7 +101,7 @@ class Topology(object):
                         l.sort()
                     angles.append(l)
 
-        print angles
+        #print angles
 
         return angles
 
