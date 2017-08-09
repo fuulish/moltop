@@ -350,6 +350,14 @@ class Graph(object):
 
         return True
 
+    def __ne__(self, other):
+        """
+        """
+
+        iseq = self.__eq__(other)
+
+        return not iseq
+
     def distance(self, from_vert, to_vert):
         #if all distances were one:
 
