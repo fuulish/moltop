@@ -371,10 +371,15 @@ class Topology(object):
         """
         """
 
+        #naming scheme numerical for "heavy" atoms
+        nametrack = defaultdict(lambda: 0)
+
         syms = self.atoms.get_chemical_symbols()
 
         fsttypes = defaultdict(list)
+        shortid = {}
         loctypes = []
+        shrtypes = []
 
         for i, a in enumerate(self.atoms):
             type = syms[i] + ' '
@@ -383,12 +388,24 @@ class Topology(object):
             connecting.sort()
 
             #contract into "chemical" formula - still missing
+            chem = defaultdict(lambda: 0)
 
-            type += ''.join(c for c in connecting)
+            for c in connecting:
+                chem[c] += 1
+
+            type += ''.join(key+str(chem[key]) for key in chem)
 
             #for b in self.graph[i]:
             #    type += syms[b]
 
+            if not type in fsttypes:
+                nametrack[syms[i]] += 1
+                shorttype = syms[i] + str(nametrack[syms[i]])
+                shortid[type] = shorttype
+            else:
+                shorttype = shortid[type]
+
+            shrtypes.append(shorttype)
             fsttypes[type].append(i)
             loctypes.append(type)
 
@@ -400,7 +417,7 @@ class Topology(object):
         #    atm = spl[0]uuu
 
         for key in fsttypes:
-            print key, fsttypes[key]
+            print key, fsttypes[key], shortid[key]
 
 def acceptable_bond_lengths(s1, s2):
     """
