@@ -367,7 +367,7 @@ class Topology(object):
 
         return left, right
 
-    def extract_types(self):
+    def extract_types(self, picky=False):
         """
         """
 
@@ -385,7 +385,34 @@ class Topology(object):
         for i, a in enumerate(self.atoms):
             type = syms[i] + '#'
 
-            connecting = [syms[b] for b in self.graph[i]]
+            if picky:
+                connecting = []
+
+                for vertex in self.graph[i]:
+                    connecting.append(syms[vertex])
+
+                    for b in self.graph[vertex]:
+                        connecting[-1] += syms[b]
+            else:
+                #connecting = [syms[b] for b in self.graph[i]]
+                #slightly more picky
+                connecting = [syms[b]+str(len(self.graph[b])) for b in self.graph[i]]
+                if syms[i] == 'H':
+                    connecting = []
+
+                    if len(self.graph[i]) != 1:
+                        raise RuntimeError('do not know how to handle hyper-hydrogen')
+
+                    #for vertex in self.graph[i]:
+                    #    connecting.append(syms[vertex])
+
+                    #    for b in self.graph[vertex]:
+                    #        connecting[-1] += syms[b]
+
+                    for vertex in self.graph[i]:
+                        connecting.append(syms[vertex])
+                        connecting[-1] += str(len(self.graph[vertex]))
+
             connecting.sort()
 
             #contract into "chemical" formula - still missing
@@ -413,72 +440,92 @@ class Topology(object):
         #next round use kinds of connecting atoms and carefully sort, somehow
         #maybe sort according to number of bonds
 
-        for key in fsttypes:
-            print key, fsttypes[key], fulltypes[key]
+        #for key in fsttypes:
+        #    print key, fsttypes[key], fulltypes[key]
+
+        return shrtypes
+
+        #in second round only change hydrogens according to short-type connectivity
 
         #for type in loctypes:
         #    spl = type.split()
         #    atm = spl[0]uuu
 
-        print '\n'
+        ## print '\n'
 
-        loctypes = []
-        newtypes = []
-        newid = {}
-        nametrack = defaultdict(lambda: 0)
+        ## loctypes = []
+        ## newtypes = []
+        ## newid = {}
+        ## nametrack = defaultdict(lambda: 0)
 
-        for i, shrt in enumerate(shrtypes):
+        ## if picky:
 
-            type = shrt + '#'
+        ##     for i, shrt in enumerate(shrtypes):
 
-            #changing shrtypes[b] to syms[b] is the same as the first step
-            connecting = [shrtypes[b] for b in self.graph[i]]
-            connecting.sort()
+        ##         type = shrt + '#'
 
-            type += ''.join(c for c in connecting)
+        ##         #changing shrtypes[b] to syms[b] is the same as the first step
+        ##         connecting = [shrtypes[b] for b in self.graph[i]]
+        ##         connecting.sort()
 
-            if not type in loctypes: 
-                #print 'hello'
-                newtype = shrt + str(nametrack[shrt])
-                nametrack[shrt] += 1
-                newid[type] = newtype
-            else:
-                newtype = newid[type]
+        ##         type += ''.join(c for c in connecting)
 
-            loctypes.append(type)
-            newtypes.append(newtype)
+        ##         if not type in loctypes: 
+        ##             #print 'hello'
+        ##             newtype = shrt + str(nametrack[shrt])
+        ##             nametrack[shrt] += 1
+        ##             newid[type] = newtype
+        ##         else:
+        ##             newtype = newid[type]
 
-        print newtypes, set(newtypes)
+        ##         loctypes.append(type)
+        ##         newtypes.append(newtype)
 
-        return newtypes
-        #print '\n'
+        ## else:
+        ##     for i, shrt in enumerate(shrtypes):
 
-        #loctypes = []
-        #newtypes = []
-        #newid = {}
-        #nametrack = defaultdict(lambda: 0)
+        ##         type = shrt + '#'
 
-        #for i, shrt in enumerate(shrtypes):
+        ##         #changing shrtypes[b] to syms[b] is the same as the first step
+        ##         #connecting = [syms[b]+str(len(self.graph[b])) for b in self.graph[i]]
+        ##         #connecting = [syms[b]+syms[a] for a in self.graph[b] for b in self.graph[i]]
+        ##         #connecting.sort()
 
-        #    type = shrt + '#'
+        ##         #connecting = []
+        ##         #for b in self.graph[i]:
+        ##         #    connecting.append(syms[b])
 
-        #    connecting = [syms[b] for b in self.graph[i]]
-        #    connecting.sort()
+        ##         #    l = []
+        ##         #    for a in self.graph[b]:
+        ##         #        l.append(syms[a])
 
-        #    type += ''.join(c for c in connecting)
+        ##         #    l.sort()
 
-        #    if not type in loctypes: 
-        #        #print 'hello'
-        #        newtype = shrt + str(nametrack[shrt])
-        #        nametrack[shrt] += 1
-        #        newid[type] = newtype
-        #    else:
-        #        newtype = newid[type]
+        ##         #    for a in l:
+        ##         #        connecting[-1] += a
 
-        #    loctypes.append(type)
-        #    newtypes.append(newtype)
 
-        #print newtypes, set(newtypes)
+        ##         connecting = [shrtypes[b] for b in self.graph[i]]
+        ##         connecting.sort()
+
+        ##         type += ''.join(c for c in connecting)
+
+        ##         print type
+
+        ##         if not type in loctypes: 
+        ##             #print 'hello'
+        ##             newtype = shrt + str(nametrack[shrt])
+        ##             nametrack[shrt] += 1
+        ##             newid[type] = newtype
+        ##         else:
+        ##             newtype = newid[type]
+
+        ##         loctypes.append(type)
+        ##         newtypes.append(newtype)
+
+        ## print newtypes, set(newtypes)
+
+        #return newtypes
 
 def acceptable_bond_lengths(s1, s2):
     """
