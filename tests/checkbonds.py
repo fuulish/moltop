@@ -123,7 +123,8 @@ dtrj = []
 
 for ngl in np.linspace(strt, strt + 2.*np.pi, 11):
     cpy = top.atoms.copy()
-    cpy.set_dihedral(top._diheds[ndih], ngl, indices=left)
+    cpy.set_dihedral(top._diheds[ndih], ngl, indices=right)
+    #cpy.set_dihedral(top._diheds[ndih], ngl, indices=left)
     traj.append(cpy)
     ltrj.append(cpy[left])
     rtrj.append(cpy[right])
