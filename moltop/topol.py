@@ -212,9 +212,11 @@ class Topology(object):
             edges = self.graph[vertex]
             nedge = len(edges)
 
+            #I think this is not general enough, though
             if nedge == 3:
-                l = [vertex]
-                l.extend([edges[0], edges[1], edges[2]])
+                #l = [vertex]
+                l = [edges[0], edges[1], vertex, edges[2]]
+                #l.extend([edges[0], edges[1], edges[2]])
 
                 #ringcheck, only do impropers if in ring structure?
                 if ringcheck:
