@@ -8,7 +8,7 @@ from copy import copy, deepcopy
 
 class Topology(object):
 
-    def __init__(self, atoms, bonds=None, angles=None, dihedrals=None, impropers=None, onefour=0.5, sorted=False, ring_improper=False, bond_fudge=1.0, onlygraph=False):
+    def __init__(self, atoms, bonds=None, angles=None, dihedrals=None, impropers=None, onefour=0.5, sorted=False, ring_improper=True, bond_fudge=1.0, onlygraph=False):
         """
         Class for handling molecular topologies
         """
@@ -221,18 +221,6 @@ class Topology(object):
                 #l = [vertex]
                 l = [edges[0], edges[1], vertex, edges[2]]
                 #l.extend([edges[0], edges[1], edges[2]])
-
-                #ringcheck, only do impropers if in ring structure?
-                if ringcheck:
-                    cnt = []
-                    for ring in rings:
-                        cnt.append(0)
-                        for e in l:
-                            if e in ring:
-                                cnt[-1] += 1
-
-                    if all([c < 3 for c in cnt]):
-                        continue
 
                 if sorted:
                     l.sort()
