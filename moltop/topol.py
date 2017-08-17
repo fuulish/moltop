@@ -200,7 +200,7 @@ class Topology(object):
 
         return dihed
 
-    def determine_impropers(self, sorted=False, ringcheck=False):
+    def determine_impropers(self, sorted=False, ringcheck=True):
         """
         """
 
@@ -214,6 +214,10 @@ class Topology(object):
 
             #I think this is not general enough, though
             if nedge == 3:
+
+                if ringcheck and not any([vertex in ring for ring in rings]):
+                    continue
+
                 #l = [vertex]
                 l = [edges[0], edges[1], vertex, edges[2]]
                 #l.extend([edges[0], edges[1], edges[2]])
