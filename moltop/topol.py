@@ -2,7 +2,6 @@ from collections import defaultdict
 from graph import Graph
 from topoltools import plot_graph
 from atomdat import cov_rad
-import matplotlib.pyplot as plt
 import numpy as np
 from copy import copy, deepcopy
 
@@ -42,9 +41,6 @@ class Topology(object):
             else:
                 self._improp = impropers
 
-        #plot_graph(atoms.positions, g)
-        #plt.show()
-
     def calculate_distmat(self):
         """
         """
@@ -83,25 +79,14 @@ class Topology(object):
         for vertex in self.graph:
             edges = self.graph[vertex]
             nedge = len(edges)
-            #if nedge == 2:
-            #    l = [edges[0], vertex, edges[1]]
-            #    #l.extend(edges)
-            #    if sorted:
-            #        l.sort()
-            #    angles.append(l)
-            #elif nedge > 2:
-            #print 'new: ', edges
-            #if nedge >= 2:
+
             for c, i in enumerate(edges):
                 for j in edges[c+1:]:
                     l = [i, vertex, j]
-                    #print 'actual angle: ', l
-                    #l.extend([i,j])
+
                     if sorted:
                         l.sort()
                     angles.append(l)
-
-        #print angles
 
         return angles
 
@@ -126,47 +111,6 @@ class Topology(object):
         """
 
         dihed = []
-        #path = self.graph.build_path_matrix()
-        #rings = self.graph.find_rings()
-
-        #again, problems with ring structures,
-        #because there might be a dihedral at a longer path than the shortest one that will hence not be recognized
-        #i.e., determine all paths, and if more than one path, check that one as well.
-        #create second graph, that removes vertices contained in currently shortest path and 
-        #   check connectivity (if disconnected, only one path)
-        #   otherwise keep calculating shortest path, and recalculate new shortest path
-        # if ring structure -> two paths, if more than two paths, then something is weird
-
-        #for vx1 in self.graph:
-        #    one = [vx1]
-        #    for vx2 in self.graph[vx1]:
-        #        if vx2 in one:
-        #            continue
-        #        one.append(vx2)
-        #        for vx3 in self.graph[vx2]:
-        #            if vx3 in one:
-        #                continue
-        #            one.append(vx3)
-        #            for vx4 in self.graph[vx3]:
-        #                if vx4 in one:
-        #                    continue
-        #                one.append(vx4)
-
-        #                dih = deepcopy(one)
-        #                dih.sort()
-
-        #                for ndi in dihed:
-        #                    wrk = deepcopy(ndi)
-        #                    wrk.sort()
-        #                    if wrk == dih:
-        #                        #print 'duplicate'
-        #                        duplicate = True
-        #                        continue
-
-        #                if sorted:
-        #                    one.sort()
-
-        #                dihed.append(one)
 
         for vx1 in self.graph:
             for vx2 in self.graph:
@@ -175,7 +119,6 @@ class Topology(object):
 
                 paths = self.graph.find_all_paths(vx1, vx2)
 
-                #print paths
                 for path in paths:
                     if len(path) == 4:
                         dih = deepcopy(path)
@@ -225,43 +168,6 @@ class Topology(object):
                 if sorted:
                     l.sort()
                 improper.append(l)
-
-            ##as necessary condition need all edges at least have 2 edges as well
-            ##probably not sufficient though
-            ##should check if it's actually a ring structure
-
-            #if nedge > 2:
-            ##if nedge == 3:
-            #    for i, e1 in enumerate(edges):
-            #        for j, e2 in enumerate(edges[i+1:]):
-            #            for k, e3 in enumerate(edges[j+i+2:]):
-            #                print ''
-            #                print vertex+1, e1+1, e2+1, e3+1
-            #                print self.graph[e1]
-            #                print self.graph[e2]
-            #                print self.graph[e3]
-            #                nbtruth = [len(self.graph[e1]) > 1, len(self.graph[e2]) > 1, len(self.graph[e3]) > 1]
-
-            #                
-            #                conn = 0
-            #                for mxcon in nbtruth:
-            #                    if mxcon:
-            #                        conn += 1
-
-            #                if conn > 1:
-            #                    continue
-
-            #                #print nbtruth, all(nbtruth)
-            #                #if not all(nbtruth):
-            #                #    continue
-
-            #                l = [vertex, e1, e2, e3]
-
-            #                if sorted:
-            #                    l.sort()
-
-            #                improper.append(l)
-
 
         return improper
 
@@ -431,95 +337,7 @@ class Topology(object):
             fulltypes[shorttype] = type
             loctypes.append(type)
 
-        #next round use kinds of connecting atoms and carefully sort, somehow
-        #maybe sort according to number of bonds
-
-        #for key in fsttypes:
-        #    print key, fsttypes[key], fulltypes[key]
-
         return shrtypes
-
-        #in second round only change hydrogens according to short-type connectivity
-
-        #for type in loctypes:
-        #    spl = type.split()
-        #    atm = spl[0]uuu
-
-        ## print '\n'
-
-        ## loctypes = []
-        ## newtypes = []
-        ## newid = {}
-        ## nametrack = defaultdict(lambda: 0)
-
-        ## if picky:
-
-        ##     for i, shrt in enumerate(shrtypes):
-
-        ##         type = shrt + '#'
-
-        ##         #changing shrtypes[b] to syms[b] is the same as the first step
-        ##         connecting = [shrtypes[b] for b in self.graph[i]]
-        ##         connecting.sort()
-
-        ##         type += ''.join(c for c in connecting)
-
-        ##         if not type in loctypes: 
-        ##             #print 'hello'
-        ##             newtype = shrt + str(nametrack[shrt])
-        ##             nametrack[shrt] += 1
-        ##             newid[type] = newtype
-        ##         else:
-        ##             newtype = newid[type]
-
-        ##         loctypes.append(type)
-        ##         newtypes.append(newtype)
-
-        ## else:
-        ##     for i, shrt in enumerate(shrtypes):
-
-        ##         type = shrt + '#'
-
-        ##         #changing shrtypes[b] to syms[b] is the same as the first step
-        ##         #connecting = [syms[b]+str(len(self.graph[b])) for b in self.graph[i]]
-        ##         #connecting = [syms[b]+syms[a] for a in self.graph[b] for b in self.graph[i]]
-        ##         #connecting.sort()
-
-        ##         #connecting = []
-        ##         #for b in self.graph[i]:
-        ##         #    connecting.append(syms[b])
-
-        ##         #    l = []
-        ##         #    for a in self.graph[b]:
-        ##         #        l.append(syms[a])
-
-        ##         #    l.sort()
-
-        ##         #    for a in l:
-        ##         #        connecting[-1] += a
-
-
-        ##         connecting = [shrtypes[b] for b in self.graph[i]]
-        ##         connecting.sort()
-
-        ##         type += ''.join(c for c in connecting)
-
-        ##         print type
-
-        ##         if not type in loctypes: 
-        ##             #print 'hello'
-        ##             newtype = shrt + str(nametrack[shrt])
-        ##             nametrack[shrt] += 1
-        ##             newid[type] = newtype
-        ##         else:
-        ##             newtype = newid[type]
-
-        ##         loctypes.append(type)
-        ##         newtypes.append(newtype)
-
-        ## print newtypes, set(newtypes)
-
-        #return newtypes
 
 def acceptable_bond_lengths(s1, s2):
     """
