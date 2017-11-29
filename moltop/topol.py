@@ -12,7 +12,7 @@ class Topology(object):
         Class for handling molecular topologies
         """
 
-        if periodic and not all(self.atoms.get_pbc()):
+        if periodic and not all(atoms.get_pbc()):
             raise RuntimeError('Requested periodic treatment of system, but all boundary conditions set to False')
 
         if periodic and np.all(atoms.get_cell() == 0.):
