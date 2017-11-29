@@ -350,4 +350,4 @@ def acceptable_bond_lengths(s1, s2):
     """
     """
 
-    return cov_rad[s1] + cov_rad[s2]
+    return cov_rad[s1.upper()] + cov_rad[s2.upper()]
