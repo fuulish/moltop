@@ -18,6 +18,7 @@ class Topology(object):
         if periodic and np.all(atoms.get_cell() == 0.):
             raise RuntimeError('Requested periodic treatment of system, but all cell dimensions set to zero')
 
+        self.periodic = periodic
         self.atoms = atoms
         self._bonds = bonds
         self._distmat = self.calculate_distmat()
