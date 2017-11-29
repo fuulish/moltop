@@ -120,14 +120,27 @@ class Topology(object):
         dihed = []
 
         for vx1 in self.graph:
-            for vx2 in self.graph:
-                if vx1 == vx2:
+            newpath = [vx1]
+
+            for vx2 in self.graph[vx1]:
+                if vx2 not in newpath:
+                    newpath = newpath[:1] + [vx2]
+                else:
                     continue
 
-                paths = self.graph.find_all_paths(vx1, vx2)
+                for vx3 in self.graph[vx2]:
+                    if vx3 not in newpath:
+                        newpath = newpath[:2] + [vx3]
+                    else:
+                        continue
 
-                for path in paths:
-                    if len(path) == 4:
+                    for vx4 in self.graph[vx3]:
+                        if vx4 not in newpath:
+                            newpath = newpath[:3] + [vx4]
+                        else:
+                            continue
+
+                        path = deepcopy(newpath)
                         dih = deepcopy(path)
                         dih.sort()
 
