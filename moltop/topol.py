@@ -7,10 +7,16 @@ from copy import copy, deepcopy
 
 class Topology(object):
 
-    def __init__(self, atoms, bonds=None, angles=None, dihedrals=None, impropers=None, onefour=0.5, sorted=False, ring_improper=True, bond_fudge=1.0, onlygraph=False):
+    def __init__(self, atoms, bonds=None, angles=None, dihedrals=None, impropers=None, onefour=0.5, sorted=False, ring_improper=True, bond_fudge=1.0, onlygraph=False, periodic=False):
         """
         Class for handling molecular topologies
         """
+
+        if periodic and not all(self.atoms.get_pbc()):
+            raise RuntimeError('Requested periodic treatment of system, but all boundary conditions set to False')
+
+        if periodic and np.all(atoms.get_cell() == 0.):
+            raise RuntimeError('Requested periodic treatment of system, but all cell dimensions set to zero')
 
         self.atoms = atoms
         self._bonds = bonds
@@ -49,7 +55,7 @@ class Topology(object):
         alist = range(len(self.atoms))
 
         for i, a in enumerate(self.atoms):
-            distmat.append(self.atoms.get_distances(i, alist))
+            distmat.append(self.atoms.get_distances(i, alist, mic=self.periodic))
 
         return distmat
 
