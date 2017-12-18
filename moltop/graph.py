@@ -38,7 +38,7 @@ class Graph(object):
 
     def check_connectivity(self):
 
-        if not self.connected():
+        if not self.connected() and len(self.verts) > 1:
             raise RuntimeError("There are disconnected vertices")
 
     def connected(self):
